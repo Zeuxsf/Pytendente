@@ -4,4 +4,5 @@ string = "Alexandre"
 
 padrao = re.compile("Alexandre")
 
-re.fullmatch(padrao, string)
+resultado = re.fullmatch(padrao, string)
+print(resultado)
