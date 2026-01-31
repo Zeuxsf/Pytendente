@@ -6,6 +6,12 @@ dist/
 wheels/
 *.egg-info
 
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
 # Virtual environments
 .venv
+
 
