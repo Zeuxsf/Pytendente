@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 
 database = create_engine("sqlite:///dados.db")
 Base = declarative_base()
+SessionLocal = sessionmaker(bind=database)
 
 class Client(Base):
     __tablename__ = "clients"
@@ -29,28 +30,4 @@ class Ticket(Base):
         self.ticket = ticket
         self.subject = subject
         self.response = response       
-
-class Knowledge(Base):
-    __tablename__ = "knowledge"
-
-    id = Column("id", Integer,primary_key=True, autoincrement=True)
-    question = Column("question", String)
-    response = Column("response", String)
-
-    def __init__(self, question,response):
-        self.question = question
-        self.response = response
-
-class Log(Base):
-    __tablename__ = "logs"
-
-    id = Column("id", Integer,primary_key=True, autoincrement=True)
-    client_id = Column("client_id", Integer, ForeignKey("clients.id"))
-    question = Column("question", String)
-    revised = Column("revised", String, default="No")
-
-    def __init__(self, client_id,question,revised="No"):
-        self.client_id = client_id
-        self.question = question
-        self.revised = revised
 
