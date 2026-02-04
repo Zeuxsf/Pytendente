@@ -13,5 +13,7 @@ wheels/
 
 # Virtual environments
 .venv
+.env
 
-
+# Models
+.pkl

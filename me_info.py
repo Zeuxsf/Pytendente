@@ -6,7 +6,7 @@ import pickle
 
 #Essa função vai carregar o modelo pré treinado, para que não seja preciso carregar o banco de dados toda vez que usar o bot
 def carregar_modelo():
-    with open('bot/trained_model.pkl', 'rb') as file:
+    with open('bot/trained_model_2.pkl', 'rb') as file:
         model = pickle.load(file)
 
     vectorizer = model['vectorizer']
