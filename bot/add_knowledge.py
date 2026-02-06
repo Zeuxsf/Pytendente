@@ -9,7 +9,7 @@ def clear():
 session = SessionLocal()
 
 
-#Método de adicionar perguntas uma a uma
+#Método manual de adicionar conhecimento ao banco de dados
 """
 while True:
     p = []
@@ -29,13 +29,11 @@ while True:
     clear()    
 """
 
-#Método automático, só colar um JSON dentro da lista com perguntas e respostas e depois rodar o script
-""" 
-dados_me = [
-    {
+#Método semi automático para adicionar conhecimentos ao banco de dados. Só colar um JSON dentro da lista com perguntas e respostas e depois rodar o script
+"""
+dados_me = []
 
-    }
-]
+print(dados_me[6]['resposta'])
 
 for item in dados_me:
     resp = Me_Info(question=item['perguntas'],response=item['resposta'])
@@ -47,14 +45,15 @@ for item in dados_me:
 print('Banco de dados atualizado com sucesso')
 """
 
-#Código para deletar conhecimentos
 """
-item = session.query(Knowledge).filter(Knowledge.id == 2).first()
+#Código para deletar conhecimentos
+item = session.query(Me_Info).filter(Me_Info.id == 3).first()
 session.delete(item)
 session.commit()
 """
 
 #Código para treinar modelos de bot com conhecimentos do banco de dados
+"""
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
@@ -94,7 +93,8 @@ model_data = {
 
   
 
-with open('bot/trained_model_2.pkl','wb') as file:
+with open('bot/me_model.pkl','wb') as file:
     pickle.dump(model_data,file)
 
 print('salvo')
+"""
