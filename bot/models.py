@@ -26,18 +26,3 @@ class Enterprise_Info(Base):
     def __init__(self, question,response):
         self.question = question
         self.response = response
-
-
-
-class Log(Base):
-    __tablename__ = "logs"
-
-    id = Column("id", Integer,primary_key=True, autoincrement=True)
-    question = Column("question", String)
-    type_info = Column('type_info', String)
-    revised = Column("revised", String, default="No")
-
-    def __init__(self,question,type_info,revised="No"):
-        self.question = question
-        self.type_info = type_info
-        self.revised = revised

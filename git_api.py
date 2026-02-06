@@ -2,17 +2,6 @@ import requests
 import os
 from dotenv import load_dotenv
 
-
-url = "https://api.github.com/users/Zeuxsf"
-resp = requests.get(url)
-dados = resp.json()
-
-#print(resp.status_code)
-print(dados)
-#print(dados[5]['name'])
-#print(dados[5]['description'])
-
-
 url = "https://api.github.com/graphql"
 
 load_dotenv()
@@ -40,21 +29,31 @@ query {
 }
 """
 
-resp = requests.post(
+response = requests.post(
     url,
     json={"query": query},
     headers=headers
 )
+data = response.json()
+datatwo = data['data']['user']['pinnedItems']['nodes']
 
-data = resp.json()
-
-print(data)
-
-def info_sobre_mim():
-  pass
-  #Vai pegar informações basicas sobre mim no github (seguidores, descrição, quantidade de repos públicas)
+repos = []
 
 def principais_repos():
-  pass
-  #Vai mostrar informações sobre os principais repositórios que eu tenho (os que eu já deixo pinado no perfil, são os melhores)
-  
+  #Vai retornar informações sobre os principais repositórios que eu tenho (os que eu já deixo pinado no perfil)
+  return datatwo
+
+#print(principais_repos())  
+
+if __name__ == '__main__':
+  confirma = 1 #testes testes testes
+
+  if confirma == 1:
+    for item in datatwo:
+      #Exemplo de uso do datatwo
+      print(f'Nome: {item['name']}')
+      print(f'Descrição: {item['description']}')
+      print(f'Estrelas: {item['stargazerCount']}')
+      print(f'Linguagem Principal do Projeto: {item['primaryLanguage']['name']}')
+      print(f'Link do Repositório: {item['url']}')
+      print('---')

@@ -45,7 +45,7 @@ for item in dados_me:
 print('Banco de dados atualizado com sucesso')
 """
 
-#Código para deletar conhecimentos
+#Código para deletar conhecimentos do banco de dados
 """
 item = session.query(Me_Info).filter(Me_Info.id == 3).first()
 session.delete(item)

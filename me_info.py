@@ -1,8 +1,9 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
-from bot.models import Me_Info, Enterprise_Info, Log, SessionLocal, Base, database
+from api.models import Log, SessionLocal, Base, database
 import pickle
+from git_api import principais_repos
 
 #Essa função vai carregar o modelo pré treinado, para que não seja preciso carregar o banco de dados toda vez que usar o bot
 def carregar_modelo():
@@ -25,9 +26,12 @@ def responder(pergunta):
 
     idx = similaridades.argmax()
     score = similaridades[0][idx]
-
     if score < 0.1:
         return 'Desculpe, não entendi. Pode repetir?'
+
+    if '[0]' in responses[idx]:
+        return principais_repos()
+        
     return responses[idx]
 
 
@@ -44,7 +48,7 @@ def atualizar_log():
 #Essa função vai adicionar perguntas que o bot não conseguiu entender ao banco de Log, o admin poderá revisar essas mensagens e decidir se vai alocar elas ou descartá-las (lembrando que essa parte de revisar logs vai depender se você vai criar um script pra automatizar isso ou se vai fazer hardcoded)
 def adicionar_log(pergunta):
     session = SessionLocal()
-    log = Log(pergunta,'Demo')
+    log = Log(pergunta,'Me_info')
     session.add(log)
     session.commit()
     session.close()
