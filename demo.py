@@ -3,6 +3,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
 from api.models import Log, SessionLocal, Base, database
 import pickle
+from git_api import principais_repos
 
 #Essa função vai carregar o modelo pré treinado, para que não seja preciso carregar o banco de dados toda vez que usar o bot
 def carregar_modelo():
@@ -17,18 +18,6 @@ def carregar_modelo():
     return vectorizer,questions,responses,vectors
 
 vectorizer,questions,responses,vectors = carregar_modelo()
-
-#Função em que o bot vai comparar a pergunta do usuário e as salvas no banco de conhecimento, a com o melhor score será usada
-def responder(pergunta):
-    vetor_user = vectorizer.transform([pergunta])
-    similaridades = cosine_similarity(vetor_user, vectors)
-
-    idx = similaridades.argmax()
-    score = similaridades[0][idx]
-
-    if score < 0.1:
-        return 'Desculpe, não entendi. Pode repetir?'
-    return responses[idx]
 
 
 #Essa função vai atualizar o banco de log durante a execução do programa, para que não seja reiniciar para que o sistema tenha acesso ás novas informações
@@ -50,18 +39,28 @@ def adicionar_log(pergunta):
     session.close()
 
 
-log = atualizar_log() #Já deixa o log ativado, pronto pra ser usado no teste abaixo
+log = atualizar_log() #Já deixa o log ativado, pronto pra ser usado nas verificações
+
+
+#Função em que o bot vai comparar a pergunta do usuário e as salvas no banco de conhecimento, a com o melhor score será usada
+def responder(pergunta):
+    log = atualizar_log()
+    vetor_user = vectorizer.transform([pergunta])
+    similaridades = cosine_similarity(vetor_user, vectors)
+
+    idx = similaridades.argmax()
+    score = similaridades[0][idx]
+    if score < 0.1:
+        if pergunta not in log:
+            adicionar_log(pergunta) #Decidi deixar o log no automático por praticidade, mas antes disso o bot perguntava se o usuário deixaria ou não a pergunta entrar no log (pls, não use seus dados pessoais nas perguntas, caso tenha feito isso, me mande um email pedindo para remover)
+            print(f'adicionando {pergunta} ao log')        
+        return 'Desculpe, não entendi. Pode repetir?'
+        
+    return responses[idx]
+
 
 #Teste do modelo Empresa Fictícia
 if __name__ == '__main__':
     while True: 
         p = str(input('Pergunte: '))
         print(responder(p))
-        if p not in log:
-            if responder(p) == 'Desculpe, não entendi. Pode repetir?':
-                print('Deseja adicionar sua pergunta ao Log para podermos melhorar nossas respostas?')
-                sn = str(input('[1]SIM [Qualquer tecla]NÃO: '))
-                if sn == '1':
-                    adicionar_log(p)
-                    print(f'"{p}" Adicionado ao log de perguntas sem resposta.')
-                    log = atualizar_log()            
