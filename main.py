@@ -4,3 +4,5 @@ from action_routes import action_router
 app = FastAPI()
 
 app.include_router(action_router)
+
+#use uvicorn main:app --reload para rodar localmente

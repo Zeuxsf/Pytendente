@@ -88,12 +88,12 @@ def abrir_ticket(nome,user_email,assunto,mensagem):
     finally:
         session.close()
 
-def visualizar_ticket(nome,user_email, ticket):
+def visualizar_ticket(user_email, ticket):
     try:
         #Essa função serve pro usuário visualizar os tickets que ele possui
-        #Eu pensei em fazer um intermediário pra tipo, o usuário visualizar os tickets que ele possui e depois escolher qual ele quer visualizar... mas, eu quis manter a responsabilidade do usuário de guardar o próprio ticket hehe (É um MVP, espere coisas desse tipo)
+        #Eu pensei em fazer um intermediário pra tipo, o usuário visualizar os tickets que ele possui e depois escolher qual ele quer visualizar... mas, eu quis manter a responsabilidade do usuário de guardar o próprio ticket hehe (Além de que me tira a responsabilidade de ter que criar usuários com senha)(É um MVP, espere coisas desse tipo 🫣)
         session = SessionLocal()
-        user_id = session.query(Client).filter(Client.name == nome.lower(), Client.email == user_email.lower()).first()
+        user_id = session.query(Client).filter(Client.email == user_email.lower()).first()
         resposta = session.query(Ticket).filter(Ticket.client_id == user_id.id, Ticket.ticket == ticket).first()
 
         return {

@@ -42,7 +42,7 @@ log = atualizar_log() #Já deixa o log ativado, pronto pra ser usado nas verific
 
 
 #Função em que o bot vai comparar a pergunta do usuário e as salvas no banco de conhecimento, a com o melhor score será usada
-def responder(pergunta):
+def responder_me(pergunta):
     log = atualizar_log()
     vetor_user = vectorizer.transform([pergunta])
     similaridades = cosine_similarity(vetor_user, vectors)
@@ -53,9 +53,9 @@ def responder(pergunta):
         if pergunta not in log:
             adicionar_log(pergunta) #Decidi deixar o log no automático por praticidade, mas antes disso o bot perguntava se o usuário deixaria ou não a pergunta entrar no log (pls, não use seus dados pessoais nas perguntas, caso tenha feito isso, me mande um email pedindo para remover)
             print(f'adicionando {pergunta} ao log')        
-        return 'Desculpe, não entendi. Pode repetir?'
+        return {"resposta":'Desculpe, não entendi. Pode repetir?'}
         
-    return responses[idx]
+    return {"resposta": responses[idx]}
 
 
 #Teste do modelo Empresa Fictícia
