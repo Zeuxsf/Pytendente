@@ -26,6 +26,35 @@ def enviar_email(nome,user_email,assunto,mensagem,ticket):  #Quem diria, aprendi
     msg = email.message.Message()
     msg['Subject'] = assunto
     msg['From'] = f'{os.getenv('EMAIL_BOT')}' 
+    msg['To'] = 'alexandrefranca270324@gmail.com' #Meu email próprio para contato
+    password = f'{os.getenv('SENHA_APP')}'
+    msg.add_header('Content-Type', 'text/html')
+    msg.set_payload(corpo_email )
+
+    s = smtplib.SMTP('smtp.gmail.com: 587')
+    s.starttls()
+
+    s.login(msg['From'], password)
+    s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
+    print('Email enviado para o Admin')#Debug
+
+def enviar_email_usuario(nome,user_email,assunto,ticket):  #Essa função vai mandar um email pro próprio usuário, falando pra ele qual é o ticket dele, pra mostrar que o sistema funciona de fato 
+    corpo_email = f"""
+    <strong>Olá {nome}, aqui está o seu ticket que você abriu sobre "{assunto}"</strong>
+    <p> </p>
+    <strong>Para visualizar seu ticket, use o comando "visualizar ticket" no Pytendente, insira o seu email e o ticket gerado.
+    <strong>[Aguarde no mínimo 24h para ser respondido(a)]</strong>
+    
+    <hr style="border: none; border-top: 1px solid #ddd;">
+    
+    <p style="white-space: pre-line;">
+     Seu ticket: {ticket}
+    </p>
+    """
+
+    msg = email.message.Message()
+    msg['Subject'] = f'Ticket do Pytendente: "{assunto}"'
+    msg['From'] = f'{os.getenv('EMAIL_BOT')}' 
     msg['To'] = user_email
     password = f'{os.getenv('SENHA_APP')}'
     msg.add_header('Content-Type', 'text/html')
@@ -36,7 +65,7 @@ def enviar_email(nome,user_email,assunto,mensagem,ticket):  #Quem diria, aprendi
 
     s.login(msg['From'], password)
     s.sendmail(msg['From'], [msg['To']], msg.as_string().encode('utf-8'))
-    print('Email enviado')#Debug
+    print('Email enviado para o Usuário')#Debug
 
 def gerar_ticket_randômico():
     try:
@@ -82,7 +111,7 @@ def abrir_ticket(nome,user_email,assunto,mensagem):
         session.commit()
 
         enviar_email(nome,user_email,assunto,mensagem,ticket)
-        return ticket #Pra api poder retornar o ticket que o usuário deve guardar para obter a resposta
+        enviar_email_usuario(nome,user_email,assunto,ticket)
     except Exception as e:
         return f"ERRO ao abrir o ticket {e}"    
     finally:
@@ -107,7 +136,7 @@ def visualizar_ticket(user_email, ticket):
         session.close()       
 
 if __name__ == '__main__':
-    #abrir_ticket('Alexandre','alexandrefranca270324@gmail.com','ovo','Caro programador, estamos felizes de te contratar, você começa amanhã como CEO') #Tão deixando a gente sonhar kkkkkk
+    #abrir_ticket('Alexandre','-----@gmail.com','ovo','Caro programador, estamos felizes de te contratar, você começa amanhã como CEO') #Tão deixando a gente sonhar kkkkkk
     #print(gerar_ticket_randômico())
     #print(visualizar_ticket('Alexandre', 'alexandrefranca270324@gmail.com','uS3sF9tz'))
     '''
