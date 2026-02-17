@@ -112,6 +112,8 @@ def abrir_ticket(nome,user_email,assunto,mensagem):
 
         enviar_email(nome,user_email,assunto,mensagem,ticket)
         enviar_email_usuario(nome,user_email,assunto,ticket)
+        
+        return "Ticket aberto com sucesso! Confira seu email."
     except Exception as e:
         return f"ERRO ao abrir o ticket {e}"    
     finally:
@@ -134,6 +136,23 @@ def visualizar_ticket(user_email, ticket):
         return f"ERRO ao visualizar o ticket {e}"
     finally:
         session.close()       
+
+def responder_ticket(ticket_user, senha, resposta): #Essa é a função que o ADM (vulgo eu) vai usar para responder os tickets, vai facilitar muito na hora de responder, e é bom que já fica tudo em um sistema só. A senha de ADM fica no .env porque eu estou evitando criar sistema de usuários, pois eu acho desnecessário pra esse projeto, só farei esse sistema se o projeto crescer
+    try:
+        session = SessionLocal()
+        ticket_para_resposta = session.query(Ticket).filter(Ticket.ticket == ticket_user).first()
+        
+        if ticket_para_resposta and senha == f'{os.getenv('SENHA_ADMIN')}':
+            ticket_para_resposta.response = resposta
+            session.commit()
+            return "Resposta enviada com sucesso!"
+        else:
+            return "Não foi possível responder o ticket, confira se ele está correto ou se você tem autorização para isso."
+
+    except Exception as e:
+        return f"Não foi possível responder o ticket {e}"
+    finally:
+        session.close()
 
 if __name__ == '__main__':
     #abrir_ticket('Alexandre','-----@gmail.com','ovo','Caro programador, estamos felizes de te contratar, você começa amanhã como CEO') #Tão deixando a gente sonhar kkkkkk

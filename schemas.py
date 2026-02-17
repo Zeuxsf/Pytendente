@@ -8,3 +8,8 @@ class TicketAbrir(BaseModel):
 
 class Question(BaseModel):
     question: str    
+
+class TicketResponder(BaseModel):
+    ticket: str
+    senha: str
+    resposta: str
