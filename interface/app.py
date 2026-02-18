@@ -1,101 +1,67 @@
 import streamlit as st
-from chat_me import chat_me
-from chat_demo import chat_demo
-from infos import home_info, chat_info, ticket_info
+from chats import chat_me, chat_demo
+from infos import home_info, chat_info, ticket_info, repos
+from tickets import ticket_abrir, ticket_visualizar, ticket_responder
 
-# -----------------------------
-# CONFIG
-# -----------------------------
+#Configuração básica do site
 st.set_page_config(
     page_title="Pytendente",
-    page_icon="🕹",
+    page_icon="🎩",
     layout="wide"
 )
 
+#Criando os session state pro site não ficar resetando
 if "menu" not in st.session_state:
     st.session_state.menu = "Início"
 
 if "sub_menu" not in st.session_state:
     st.session_state.sub_menu = None
 
-
-# -----------------------------
-# SIDEBAR
-# -----------------------------
-st.sidebar.title("Menu")
-
 if "redirect_to" not in st.session_state:
     st.session_state.redirect_to = None
 
-
-# 🔥 PROCESSA REDIRECIONAMENTO AQUI
+#Essa função de redirecionamento tem que ser feita bem no topo do projeto, pra respeitar a ordem de execução do streamlit
 if st.session_state.redirect_to == "Tickets":
     st.session_state.menu = "Tickets"
-    st.session_state.sub_menu = "Criar Ticket"  # se quiser já abrir algo específico
+    sub = ''
+    if sub == '1':
+        st.session_state.sub_menu = "Abrir Ticket" 
+    elif sub == '2':
+        st.session_state.sub_menu = "Visualizar Ticket"     
+    st.session_state.redirect_to = None
+
+elif st.session_state.redirect_to == "Projetos":
+    st.session_state.menu = "Projetos"
     st.session_state.redirect_to = None
 
 
+#Side bar: É onde o usuário pode navegar
+st.sidebar.title("Menu")
+
 menu = st.sidebar.radio(
     "Navegação",
-    ["Início", "Chats", "Tickets"],
+    ["Início", "Chats", "Tickets", "Projetos"],
     key="menu"
 )
 
-# Submenus dinâmicos
+#Sub menus
 if st.session_state.menu == "Chats":
     st.sidebar.radio(
         "Selecionar Chat",
-        ["Portifólio", "Demo - Empresa Fictícia"],
+        ["Portifólio", "Demo"],
         key="sub_menu"
     )
 
 if st.session_state.menu == "Tickets":
     st.sidebar.radio(
         "Funções",
-        ["Criar Ticket", "Listar Tickets", "Fechar Ticket"],
+        ["Abrir Ticket", "Visualizar Ticket", "Responder Ticket - Admin Only"],
         key="sub_menu"
     )
 
-# -----------------------------
-# PÁGINAS
-# -----------------------------
 
 
-def ticket_create():
-    st.title("🎫 Criar Ticket")
-    titulo = st.text_input("Título")
-    descricao = st.text_area("Descrição")
-
-    if st.button("Criar"):
-        st.success(f"Ticket '{titulo}' criado com sucesso.")
-
-
-def ticket_list():
-    st.title("📋 Listar Tickets")
-
-    # Mock simples
-    tickets = [
-        {"id": 1, "titulo": "Erro no login"},
-        {"id": 2, "titulo": "Bug na API"},
-        {"id": 3, "titulo": "Atualização pendente"},
-    ]
-
-    for ticket in tickets:
-        st.write(f"ID: {ticket['id']} | {ticket['titulo']}")
-
-
-def ticket_close():
-    st.title("❌ Fechar Ticket")
-    ticket_id = st.number_input("ID do Ticket", min_value=1, step=1)
-
-    if st.button("Fechar"):
-        st.warning(f"Ticket {ticket_id} fechado.")
-
-
-# -----------------------------
-# ROTEAMENTO
-# -----------------------------
-
+#A navegação de fato acontece aqui: depois de escolher uma aba, o session state vai receber aquela aba e ficar nela até o usuário mudar
 if st.session_state.get("go_to_tickets"):
     st.session_state.menu = "Tickets"
     st.session_state.go_to_tickets = False
@@ -103,25 +69,40 @@ if st.session_state.get("go_to_tickets"):
 if st.session_state.menu == "Início":
     home_info()
 
-if st.session_state.menu == "Chats":
+elif st.session_state.menu == "Chats" and st.session_state.sub_menu == None:
     chat_info()
 
-if st.session_state.menu == "Tickets":
+if st.session_state.menu == "Tickets" and st.session_state.sub_menu == None:
     ticket_info()    
 
 elif st.session_state.menu == "Chats":
     if st.session_state.sub_menu == "Portifólio":
+        #Eu fiquei muito feliz de dar vida a essa parte do código, porque era algo q eu imaginava mas não sabia se ia ser possível com o streamlit. Não me entenda mal, eu sei que esse não é o método mais elegante de fazer o bot executar uma função, mas eu queria algo simples pra esse MVP
         r = chat_me()
+        if r == '0':
+            st.session_state.redirect_to = "Projetos"
+            st.rerun()
         if r == '1':
             st.session_state.redirect_to = "Tickets"
+            sub = '1'
             st.rerun()
-    elif st.session_state.sub_menu == "Demo - Empresa Fictícia":
+        if r == '2':
+            st.session_state.redirect_to = "Tickets"
+            sub = '2'
+            st.rerun()
+            
+    elif st.session_state.sub_menu == "Demo":
         chat_demo()
 
+
 elif st.session_state.menu == "Tickets":
-    if st.session_state.sub_menu == "Criar Ticket":
-        ticket_create()
-    elif st.session_state.sub_menu == "Listar Tickets":
-        ticket_list()
-    elif st.session_state.sub_menu == "Fechar Ticket":
-        ticket_close()
+    if st.session_state.sub_menu == "Abrir Ticket":
+        ticket_abrir()
+    elif st.session_state.sub_menu == "Visualizar Ticket":
+        ticket_visualizar()
+    elif st.session_state.sub_menu == "Responder Ticket - Admin Only":
+        ticket_responder()
+
+
+elif st.session_state.menu == "Projetos":
+    repos()
