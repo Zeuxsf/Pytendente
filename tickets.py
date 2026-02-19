@@ -145,12 +145,12 @@ def responder_ticket(ticket_user, senha, resposta): #Essa é a função que o AD
         if ticket_para_resposta and senha == f'{os.getenv('SENHA_ADMIN')}':
             ticket_para_resposta.response = resposta
             session.commit()
-            return "Resposta enviada com sucesso!"
+            return {"resposta": "Resposta enviada com sucesso!"}
         else:
-            return "Não foi possível responder o ticket, confira se ele está correto ou se você tem autorização para isso."
+            return {"resposta": "Não foi possível responder o ticket, confira se ele está correto ou se você tem autorização para isso."}
 
     except Exception as e:
-        return f"Não foi possível responder o ticket {e}"
+        return {"resposta": "Não foi possível responder o ticket"}
     finally:
         session.close()
 

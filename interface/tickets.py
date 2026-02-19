@@ -25,7 +25,7 @@ def ticket_abrir():
     if st.button("Enviar"):
         try:
             #Verificação de erros pra não rodar o comando com problemas
-            if nome or user_email or assunto or mensagem == '':
+            if nome == '' or user_email == '' or assunto == '' or mensagem == '':
                 st.error("Verifique se tem algum Campo de texto vazio.")
                 st.stop()
             if validar_email(user_email) == False:
@@ -35,8 +35,7 @@ def ticket_abrir():
             #Um loading pra mostrar ao usuário que o email está sendo enviado
             with st.spinner("Enviando..."):
                 requests.post(f"{os.getenv('API_URL')}/action/tickets/abrir",
-                    json={"nome": nome,"user_email": user_email,"assunto": assunto,"mensagem": mensagem}
-                )
+                    json={"nome": nome,"user_email": user_email,"assunto": assunto,"mensagem": mensagem})
             
             st.success(f"Ticket '{assunto}' criado com sucesso.")
         except Exception as e:
@@ -45,22 +44,53 @@ def ticket_abrir():
 
 
 def ticket_visualizar():
-    st.title("📋 Listar Tickets")
+    st.title("Visualizar Ticket")
+    user_email = st.text_input('E-mail')
+    codigo = st.text_input('Código')
 
-    # Mock simples
-    tickets = [
-        {"id": 1, "titulo": "Erro no login"},
-        {"id": 2, "titulo": "Bug na API"},
-        {"id": 3, "titulo": "Atualização pendente"},
-    ]
+    if st.button("Visualizar"):
+        try:    
+            if user_email == '' or codigo == '':
+                st.error("Verifique se tem algum Campo de texto vazio.")
+                st.stop()
+            if validar_email(user_email) == False:
+                st.error("Verifique se digitou seu E-email corretamente.")
+                st.stop()
 
-    for ticket in tickets:
-        st.write(f"ID: {ticket['id']} | {ticket['titulo']}")
+            with st.spinner("Visualizando..."):
+                response = requests.get(f"{os.getenv('API_URL')}/action/tickets/visualizar?user_email={user_email}&codigo={codigo}")
+                response = response.json()   
 
+            st.text_input("Assunto:",response["subject"])
+            st.text_area("Resposta:",response["response"])
+
+        except Exception as e:
+            st.error("Não foi possível visualizar esse ticket.")
+            print(e) 
+            
 
 def ticket_responder():
-    st.title("❌ Fechar Ticket")
-    ticket_id = st.number_input("ID do Ticket", min_value=1, step=1)
+    st.title("Responder Ticket")
+    st.write("Apenas Admins com a senha podem realizar essa função.")
 
-    if st.button("Fechar"):
-        st.warning(f"Ticket {ticket_id} fechado.")
+    codigo = st.text_input("Código")
+    senha = st.text_input("Senha")
+    resposta = st.text_area("Resposta")
+
+    if st.button("Enviar"):
+        try:    
+            if codigo == '' or senha == '' or resposta == '':
+                st.error("Verifique se tem algum Campo de texto vazio.")
+                st.stop()
+
+            with st.spinner("Respondendo..."):
+                response = requests.patch(f"{os.getenv('API_URL')}/action/tickets/responder",
+                    json={"ticket": codigo,"senha": senha,"resposta": resposta})
+                response = response.json()
+            
+            st.write(response["resposta"])
+
+        except Exception as e:
+            st.error("Não foi possível responder esse ticket.")
+            print(e) 
+
