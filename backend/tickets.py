@@ -31,7 +31,7 @@ def enviar_email(nome,user_email,assunto,mensagem,ticket):  #Quem diria, aprendi
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email )
 
-    s = smtplib.SMTP('smtp.gmail.com: 587')
+    s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
 
     s.login(msg['From'], password)
