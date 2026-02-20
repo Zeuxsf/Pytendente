@@ -57,7 +57,6 @@ def repos():
         st.markdown("**Aqui vão alguns projetos que estão Pinados no meu perfil do github.**")
         st.info("Eles são buscados dinâmicamente via API.")
 
-        load_dotenv()
         response = requests.get(f"{st.secrets['API_URL']}/action/conversation/me/repos")
         response = response.json()
 
