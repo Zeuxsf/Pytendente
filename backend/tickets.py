@@ -25,13 +25,13 @@ def enviar_email(nome,user_email,assunto,mensagem,ticket):  #Quem diria, aprendi
 
     msg = email.message.Message()
     msg['Subject'] = assunto
-    msg['From'] = f'{os.getenv('EMAIL_BOT')}' 
+    msg['From'] = f'{os.getenv("EMAIL_BOT")}' 
     msg['To'] = 'alexandrefranca270324@gmail.com' #Meu email próprio para contato
-    password = f'{os.getenv('SENHA_APP')}'
+    password = f'{os.getenv("SENHA_APP")}'
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email )
 
-    s = smtplib.SMTP('smtp.gmail.com', 465, timeout=20)
+    s = smtplib.SMTP('smtp.gmail.com: 587')
     s.starttls()
 
     s.login(msg['From'], password)
@@ -54,13 +54,13 @@ def enviar_email_usuario(nome,user_email,assunto,ticket):  #Essa função vai ma
 
     msg = email.message.Message()
     msg['Subject'] = f'Ticket do Pytendente: "{assunto}"'
-    msg['From'] = f'{os.getenv('EMAIL_BOT')}' 
+    msg['From'] = f'{os.getenv("EMAIL_BOT")}' 
     msg['To'] = user_email
-    password = f'{os.getenv('SENHA_APP')}'
+    password = f'{os.getenv("SENHA_APP")}'
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email )
 
-    s = smtplib.SMTP('smtp.gmail.com', 465, timeout=20)
+    s = smtplib.SMTP('smtp.gmail.com: 587')
     s.starttls()
 
     s.login(msg['From'], password)
