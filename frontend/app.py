@@ -3,6 +3,7 @@ from chats import chat_me, chat_demo
 from infos import home_info, chat_info, ticket_info, repos
 from tickets import ticket_abrir, ticket_visualizar, ticket_responder
 
+
 #Configuração básica do site
 st.set_page_config(
     page_title="Pytendente",

@@ -34,7 +34,7 @@ def ticket_abrir():
 
             #Um loading pra mostrar ao usuário que o email está sendo enviado
             with st.spinner("Enviando..."):
-                requests.post(f"{os.getenv('API_URL')}/action/tickets/abrir",
+                requests.post(f"{st.secrets['API_URL']}/action/tickets/abrir",
                     json={"nome": nome,"user_email": user_email,"assunto": assunto,"mensagem": mensagem})
             
             st.success(f"Ticket '{assunto}' criado com sucesso.")
@@ -58,7 +58,7 @@ def ticket_visualizar():
                 st.stop()
 
             with st.spinner("Visualizando..."):
-                response = requests.get(f"{os.getenv('API_URL')}/action/tickets/visualizar?user_email={user_email}&codigo={codigo}")
+                response = requests.get(f"{st.secrets['API_URL']}/action/tickets/visualizar?user_email={user_email}&codigo={codigo}")
                 response = response.json()   
 
             st.text_input("Assunto:",response["subject"])
@@ -84,7 +84,7 @@ def ticket_responder():
                 st.stop()
 
             with st.spinner("Respondendo..."):
-                response = requests.patch(f"{os.getenv('API_URL')}/action/tickets/responder",
+                response = requests.patch(f"{st.secrets['API_URL']}/action/tickets/responder",
                     json={"ticket": codigo,"senha": senha,"resposta": resposta})
                 response = response.json()
             

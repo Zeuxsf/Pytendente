@@ -1,13 +1,13 @@
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np 
-from api.models import Log, SessionLocal, Base, database
+from models import Log, SessionLocal, Base, database
 import pickle
 from git_api import principais_repos
 
 #Essa função vai carregar o modelo pré treinado, para que não seja preciso carregar o banco de dados toda vez que usar o bot
 def carregar_modelo():
-    with open('bot/demo_model.pkl', 'rb') as file:
+    with open('demo_model.pkl', 'rb') as file:
         model = pickle.load(file)
 
     vectorizer = model['vectorizer']

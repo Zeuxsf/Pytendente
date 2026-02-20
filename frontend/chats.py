@@ -26,7 +26,7 @@ def chat_me():
 
         #Vai fazer a chamada na API do bot
         response = requests.post(
-            f"{os.getenv('API_URL')}/action/conversation/me",
+            f"{st.secrets['API_URL']}/action/conversation/me",
             json={"question": prompt}
         )
 
@@ -64,7 +64,7 @@ def chat_demo(): #Deixei o chat Demo sem comentários porque é basicamente o ch
             st.write(prompt)
 
         response = requests.post(
-            f"{os.getenv('API_URL')}/action/conversation/demo",
+            f"{st.secrets['API_URL']}/action/conversation/demo",
             json={"question": prompt}
         )
 

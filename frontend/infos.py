@@ -59,7 +59,7 @@ def repos():
         st.info("Eles são buscados dinâmicamente via API.")
 
         load_dotenv()
-        response = requests.get(f"{os.getenv('API_URL')}/action/conversation/me/repos")
+        response = requests.get(f"{st.secrets['api']['url']}/action/conversation/me/repos")
         response = response.json()
 
         for item in response:

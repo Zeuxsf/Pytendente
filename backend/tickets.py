@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import os
 import random
 import string
-from api.models import Client, Ticket, SessionLocal, Base, database
+from models import Client, Ticket, SessionLocal, Base, database
 
 load_dotenv()
 
