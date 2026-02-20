@@ -1,8 +1,6 @@
 import streamlit as st
-import requests.
+import requests
 import re
-
-load_dotenv()
 
 
 def validar_email(email):
