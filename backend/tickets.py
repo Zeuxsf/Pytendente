@@ -60,7 +60,7 @@ def enviar_email_usuario(nome,user_email,assunto,ticket):  #Essa função vai ma
     msg.add_header('Content-Type', 'text/html')
     msg.set_payload(corpo_email )
 
-    s = smtplib.SMTP('smtp.gmail.com: 587')
+    s = smtplib.SMTP('smtp.gmail.com', 587)
     s.starttls()
 
     s.login(msg['From'], password)
