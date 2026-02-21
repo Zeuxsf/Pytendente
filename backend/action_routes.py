@@ -31,3 +31,7 @@ async def ticket_visualizar(user_email, codigo):
 @action_router.patch("/tickets/responder")
 async def ticket_responder(data: TicketResponder):
     return responder_ticket(data.ticket,data.senha,data.resposta)
+
+@action_router.put("/wake_up")
+async def wake_up():
+    return "Acordando o sistema" #Esse endpoint eu fiz porque eu fiz deploy da API no plano gratuito do Render, e acontece que a API hiberna depois de muito tempo sem uso, esse endpoint é mais pra deixar o usuário avisado, pra ele esperar a API carregar

@@ -2,14 +2,18 @@ import streamlit as st
 from chats import chat_me, chat_demo
 from infos import home_info, chat_info, ticket_info, repos
 from tickets import ticket_abrir, ticket_visualizar, ticket_responder
+import requests
 
 
 #Configuração básica do site
 st.set_page_config(
     page_title="Pytendente",
-    page_icon="🎩",
+    page_icon="🤖",
     layout="wide"
 )
+
+with st.spinner("Por favor aguarde, o sistema irá iniciar em até 1 minuto..."):
+    requests.put(f"{st.secrets['API_URL']}/wake_up")
 
 #Criando os session state pro site não ficar resetando
 if "menu" not in st.session_state:
@@ -22,13 +26,14 @@ if "redirect_to" not in st.session_state:
     st.session_state.redirect_to = None
 
 #Essa função de redirecionamento tem que ser feita bem no topo do projeto, pra respeitar a ordem de execução do streamlit
-if st.session_state.redirect_to == "Tickets":
+if st.session_state.redirect_to == "Tickets_abrir":
     st.session_state.menu = "Tickets"
-    sub = ''
-    if sub == '1':
-        st.session_state.sub_menu = "Abrir Ticket" 
-    elif sub == '2':
-        st.session_state.sub_menu = "Visualizar Ticket"     
+    st.session_state.sub_menu = "Abrir Ticket"     
+    st.session_state.redirect_to = None
+
+if st.session_state.redirect_to == "Tickets_visualizar":
+    st.session_state.menu = "Tickets"
+    st.session_state.sub_menu = "Visualizar Ticket"     
     st.session_state.redirect_to = None
 
 elif st.session_state.redirect_to == "Projetos":
@@ -60,8 +65,6 @@ if st.session_state.menu == "Tickets":
         key="sub_menu"
     )
 
-
-
 #A navegação de fato acontece aqui: depois de escolher uma aba, o session state vai receber aquela aba e ficar nela até o usuário mudar
 if st.session_state.get("go_to_tickets"):
     st.session_state.menu = "Tickets"
@@ -84,12 +87,10 @@ elif st.session_state.menu == "Chats":
             st.session_state.redirect_to = "Projetos"
             st.rerun()
         if r == '1':
-            st.session_state.redirect_to = "Tickets"
-            sub = '1'
+            st.session_state.redirect_to = "Tickets_abrir"
             st.rerun()
         if r == '2':
-            st.session_state.redirect_to = "Tickets"
-            sub = '2'
+            st.session_state.redirect_to = "Tickets_visualizar"
             st.rerun()
             
     elif st.session_state.sub_menu == "Demo":

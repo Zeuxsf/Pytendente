@@ -7,6 +7,7 @@ def home_info():
     st.markdown("**Seja muito bem-vindo(a)!**")
     st.write("Esse projeto é um MVP, sujeito à mudanças. Caso ache algum bug ou queira sugerir uma melhoria: Abra um ticket!")
     st.info("Selecione uma opção na barra lateral.")
+    st.warning("O servidor foi hospedado em um plano gratuito, o serviço de tickets pode não funcionar. Caso queira entrar em contato comigo, me envie um e-mail: Alexandrefranca270324@gmail.com.")
 
 
 def chat_info():
