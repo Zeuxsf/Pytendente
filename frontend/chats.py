@@ -36,7 +36,7 @@ def chat_me():
         #Aqui são os comandos pré configurados no bot. Como eu disse no arquivo app.py: não é o método mais elegante de redirecionamento, mas funciona muito bem!
         if '[0]' in bot_reply['resposta'] and 'principais projetos' in bot_reply['resposta']:
             return '0'
-        elif '[1]' in bot_reply['resposta'] and 'abrindo' in bot_reply['resposta']:
+        elif '[1]' in bot_reply['resposta'] and 'Abrindo' in bot_reply['resposta']:
             return '1'
         elif '[2]' in bot_reply['resposta'] and 'criação' in bot_reply['resposta']:
             return '2'        
