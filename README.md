@@ -29,7 +29,7 @@ Funcionalidades interessantes nesse projeto: envio de emails utilizando o métod
 Caso não tenha UV, use: `pip install uv`
 
 - Clonando o Repositório: `git clone https://github.com/Zeuxsf/Pytendente.git`
-- Abra o repositório na sua IDE favorita e use: `uv init`
+- Abra o repositório na sua IDE favorita e use: `uv sync`
 - Inicie o Venv: `uv venv` e depois  `source .venv/bin/activate`
 - Instale as dependências do código: Use `uv pip install -r requirements.txt`
 - Esse projeto possui uma dockefile, use `docker build -t pytendente-api .` para montar a imagem
