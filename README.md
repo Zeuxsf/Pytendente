@@ -13,7 +13,7 @@ O front-end do pytendente foi feito usando streamlit para uma entrega rápida, f
 
 Funcionalidades interessantes nesse projeto: envio de emails utilizando o método **SMTP**, que permite um contato direto do usuário com o desenvolvedor sem sair do site. Eu incluí redirecionamentos dinâmicos no front-end do chatbot, assim que ele identifica que o usuário está falando sobre uma determinada função, ele redireciona o usuário automaticamente pra aba de interesse.
 
-### Tecnologias utilizadas
+### Tecnologias utilizadas 
 
 - IDE: VSCode
 - Linguagem: Python 3.12
